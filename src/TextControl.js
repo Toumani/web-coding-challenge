@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 
 // React-Bootstrap component
-import { FormControl } from 'react-bootstrap';
-import { HelpBlock } from 'react-bootstrap';
-import { FormGroup } from 'react-bootstrap';
+import { FormControl, HelpBlock, FormGroup } from 'react-bootstrap';
 
 // CSS import
 import './Form.css';
@@ -29,8 +27,17 @@ class TextControl extends Component {
 	}
 
 	/**
-	 * Sets email input form group validation state
-	 * Trigerred when email input value is changed after first validation
+	 * Starts displaying error message
+	 * Triggered when when control looses focus with invalid value
+	 */
+	setDisplayErrorState = (e) => {
+		if (this.state.validationState === 'error')
+			this.setState({ errorState: this.props.error, displayErrorState: true })
+	}
+
+	/**
+	 * Sets global validation visible or not
+	 * Trigerred when input value is changed after first validation
 	 * so user doesn't have error message before finishing typing
 	 */
 	setErrorState = (e) => {
@@ -41,8 +48,8 @@ class TextControl extends Component {
 	}
 
 	/**
-	 * Set email input form group validaiton state
-	 * Trigerred when email input value is changed
+	 * Sets global validaiton state
+	 * Trigerred when input value is updated
 	 */
 	setValidationState = (e) => {
 		this.setErrorState(e);
@@ -60,7 +67,8 @@ class TextControl extends Component {
 				<FormControl
 					type={ this.props.type }
 					placeholder={ this.props.placeholder }
-					onChange={ this.props.validation && this.setValidationState }
+					onChange={ this.props.validation ? this.setValidationState : undefined }
+					onBlur={ this.setDisplayErrorState }
 				/>
 				<HelpBlock>{ this.state.errorState }</HelpBlock>
 			</FormGroup>

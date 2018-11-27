@@ -119,47 +119,46 @@ class RegisterForm extends Component {
 					<Grid className="form-content">
 						<Row>
 							<Col md={12}>
-								<FormGroup>
-									<FormControl
-										type="text"
-										placeholder="Name"
-										onChange={ this.setNameState }
-									/>
-									<HelpBlock>{ this.state.nameError }</HelpBlock>
-								</FormGroup>
-							</Col>
-						</Row>
-						<Row>
-							<Col md={12}>
-								<FormGroup>
-									<FormControl
-										type="email"
-										placeholder="Email"
-									/>
-									<HelpBlock>{ this.state.emailError }</HelpBlock>
-								</FormGroup>
-							</Col>
-						</Row>
-						<Row>
-							<Col md={12}>
 								<TextControl
 									type="text"
 									validation={ true }
-									regex={ /toumani/ }
-									error="Wrond name"
-									placeholder="Placeholder"
+									regex={ /[\w\.-_]{1,40}/ }
+									error="The name length should not exeed 40 and should contain valid characters"
+									placeholder="Your name"
 								/>
 							</Col>
 						</Row>
 						<Row>
 							<Col md={12}>
-								<FormGroup>
-									<FormControl
-										type="password"
-										placeholder="Confirm"
-									/>
-									<HelpBlock>{ this.state.confirmPasswordError }</HelpBlock>
-								</FormGroup>
+								<TextControl
+									type="email"
+									validation={ true }
+									regex={ /^[\w\.-_]{2,}@\w{2,}\.\w{2,}$/ }
+									error="Please enter a valid email address"
+									placeholder="Email address"
+								/>
+							</Col>
+						</Row>
+						<Row>
+							<Col md={12}>
+								<TextControl
+									type="password"
+									validation={ true }
+									regex={ /.{6,}/ }
+									error="You password should be at least 6 characters long"
+									placeholder="Password"
+								/>
+							</Col>
+						</Row>
+						<Row>
+							<Col md={12}>
+								<TextControl
+									type="password"
+									validation={ false }
+									regex={ new RegExp('toumani') }
+									error="The given email addresses are different"
+									placeholder="Confirm password"
+								/>
 							</Col>
 						</Row>
 						<Row>
