@@ -59,6 +59,8 @@ class TextControl extends Component {
 		else {
 			this.setState({ validationState: 'error' })
 		}
+		// If control is password
+		// This is necessary to make password confirm available
 	}
 
 	render() {
@@ -68,6 +70,7 @@ class TextControl extends Component {
 					type={ this.props.type }
 					placeholder={ this.props.placeholder }
 					onChange={ this.props.validation ? this.setValidationState : undefined }
+					onKeyUp={ this.props.type === 'password' ? this.props.getPassword : undefined }
 					onBlur={ this.setDisplayErrorState }
 				/>
 				<HelpBlock>{ this.state.errorState }</HelpBlock>

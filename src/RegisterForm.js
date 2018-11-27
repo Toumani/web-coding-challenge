@@ -21,92 +21,16 @@ import './Form.css';
 class RegisterForm extends Component {
 	constructor(props) {
 		super(props);
+
 		this.state = {
-			nameError: '',
-			displayNameError: false,
-			nameValidation: null,
-
-			emailError: '',
-			displayEmailError: false,
-			emailValidation: null,
-
-			passwordError: '',
-			displayPasswordError: false,
-			passwordValidation: null,
-
-			confirmPasswordError: '',
-			displayConfirmPasswordError: false,
-			confirmPasswordValidation: null
+			password: ''
 		}
 	}
 
-	/**
-	 * Checks the name input against regex and @returns true if correct
-	 * Typically shall contain alphanumerical characters and not exeed 50 character
-	 */
-	checkName(name) {
-		var nameRegex = /^[\w\.-_]{,50}$/;
-		return (name.match(nameRegex));
-	}
-
-	/**
-	 * Sets name input form group validation state
-	 * Trigerred when name input value is changed after first validation
-	 * so user doesn't have error message before finishing typing
-	 */
-	setNameError = (e) => {
-		if (this.state.displayNameError) {
-			var errorMessage = this.checkName(e.target.value) ? '' : 'Please enter a valid name';
-			this.setState({ nameError: errorMessage});
-		}
-	}
-
-	/**
-	 * Set email input form group validaiton state
-	 * Trigerred when email input value is changed
-	 */
-	setNameState = (e) => {
-		this.setNameError(e);
-		if (this.checkName(e.target.value)) {
-			this.setState({ nameValidation: 'success', displayNameError: true })
-		}
-		else {
-			this.setState({ nameValidation: 'error' })
-		}
-	}
-
-	/**
-	 * Checks the email input against regex and @returns true if correct
-	 */
-	checkEmail(email) {
-		var emailRegex = /^[\w\.-_]{2,}@\w{2,}\.\w{2,}$/;
-		return (email.match(emailRegex));
-	}
-
-	/**
-	 * Sets email input form group validation state
-	 * Trigerred when email input value is changed after first validation
-	 * so user doesn't have error message before finishing typing
-	 */
-	setEmailError = (e) => {
-		if (this.state.displayEmailError) {
-			var errorMessage = this.checkEmail(e.target.value) ? '' : 'Please enter a valid email address';
-			this.setState({ emailError: errorMessage});
-		}
-	}
-
-	/**
-	 * Set email input form group validaiton state
-	 * Trigerred when email input value is changed
-	 */
-	setEmailState = (e) => {
-		this.setEmailError(e);
-		if (this.checkEmail(e.target.value)) {
-			this.setState({ emailValidation: 'success', displayEmailError: true })
-		}
-		else {
-			this.setState({ emailValidation: 'error' })
-		}
+	updatePasswordState = (e) => {
+		console.log('Hey ho!');
+		this.setState({ password: e.target.value });
+		console.log(e.target.value);
 	}
 
 	render() {
@@ -147,6 +71,8 @@ class RegisterForm extends Component {
 									regex={ /.{6,}/ }
 									error="You password should be at least 6 characters long"
 									placeholder="Password"
+
+									getPassword={ this.updatePasswordState }
 								/>
 							</Col>
 						</Row>
@@ -154,8 +80,8 @@ class RegisterForm extends Component {
 							<Col md={12}>
 								<TextControl
 									type="password"
-									validation={ false }
-									regex={ new RegExp('toumani') }
+									validation={ true }
+									regex={ new RegExp(this.state.password) }
 									error="The given email addresses are different"
 									placeholder="Confirm password"
 								/>
