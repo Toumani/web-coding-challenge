@@ -9,8 +9,6 @@ import { Row } from 'react-bootstrap';
 import { Col } from 'react-bootstrap';
 import { FormControl } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
-import { FormGroup } from 'react-bootstrap';
-
 // CSS import
 import './Form.css';
 
@@ -41,7 +39,7 @@ class LoginForm extends Component {
 						</Row>
 						<Row>
 							<Col md={6}>
-								<Button bsStyle="link">Register</Button>
+								<Button className="form-button" bsStyle="link">Register</Button>
 							</Col>
 							<Col md={6}>
 								<Button className="form-button" bsStyle="success">Sign in</Button>

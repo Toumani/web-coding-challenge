@@ -9,6 +9,7 @@ import { Col } from 'react-bootstrap';
 // In-app imports
 import Header from './Header';
 import LoginForm from './LoginForm';
+import RegisterForm from './RegisterForm';
 
 import './App.css';
 
