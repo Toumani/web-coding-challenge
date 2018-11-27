@@ -1,0 +1,22 @@
+.form-panel {
+	/* width: 80%;
+	max-width: 800px;
+	margin: auto; */
+}
+
+.form-content {
+	width: 100%;
+}
+
+.form-content .row {
+	margin-bottom: 35px;
+}
+
+.form-control {
+	height: 50px;
+}
+
+.form-button {
+	width: 100%;
+	height: 40px;
+}
