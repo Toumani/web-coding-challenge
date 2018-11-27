@@ -9,10 +9,19 @@ import { Row } from 'react-bootstrap';
 import { Col } from 'react-bootstrap';
 import { FormControl } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
+
 // CSS import
 import './Form.css';
 
 class LoginForm extends Component {
+	constructor(props) {
+		super(props);
+		
+		this.state = {
+			view: 'login'
+		};
+	}
+
 	render() {
 		return (
 			<Panel className="form-panel">
@@ -39,7 +48,7 @@ class LoginForm extends Component {
 						</Row>
 						<Row>
 							<Col md={6}>
-								<Button className="form-button" bsStyle="link">Register</Button>
+								<Button onClick={ this.props.disappear } className="form-button" bsStyle="link">Register</Button>
 							</Col>
 							<Col md={6}>
 								<Button className="form-button" bsStyle="success">Sign in</Button>
