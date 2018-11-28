@@ -12,6 +12,9 @@ import { Button } from 'react-bootstrap';
 import { HelpBlock } from 'react-bootstrap';
 import { FormGroup } from 'react-bootstrap';
 
+// In app imports
+import TextControl from './TextControl';
+
 // CSS import
 import './Form.css';
 
@@ -70,20 +73,22 @@ class LoginForm extends Component {
 					<Grid className="form-content">
 						<Row>
 							<Col md={12}>
-								<FormGroup validationState={ this.state.emailValidation }>
-									<FormControl
-										type="email"
-										placeholder="Email"
-										onChange={ this.setEmailState }
-									/>
-									<HelpBlock>{ this.state.emailError }</HelpBlock>
-								</FormGroup>
+								<TextControl
+									type="email"
+									validation={ true }
+									regex={ /^[\w\.-_]{2,}@\w{2,}\.\w{2,}$/ }
+									error="Please enter a valid email address"
+									placeholder="Email address"
+								/>
 							</Col>
 						</Row>
 						<Row>
 							<Col md={12}>
-								<FormControl
+								<TextControl
 									type="password"
+									validation={ false }
+									regex={ null }
+									error=""
 									placeholder="Password"
 								/>
 							</Col>
@@ -93,7 +98,7 @@ class LoginForm extends Component {
 								<Button onClick={ this.props.disappear } className="form-button" bsStyle="link">Register</Button>
 							</Col>
 							<Col md={6}>
-								<Button className="form-button" bsStyle="success">Sign in</Button>
+								<Button className="form-button" bsStyle="success" disabled={ true }>Sign in</Button>
 							</Col>
 						</Row>
 					</Grid>

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 // React-Bootstrap component
@@ -7,10 +6,8 @@ import { Panel } from 'react-bootstrap';
 import { Grid } from 'react-bootstrap';
 import { Row } from 'react-bootstrap';
 import { Col } from 'react-bootstrap';
-import { FormControl } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
-import { FormGroup } from 'react-bootstrap';
-import { HelpBlock } from 'react-bootstrap';
+import { FormControl, HelpBlock, FormGroup } from 'react-bootstrap';
 
 // In app imports
 import TextControl from './TextControl';
@@ -23,16 +20,97 @@ class RegisterForm extends Component {
 		super(props);
 
 		this.state = {
-			password: ''
+			password: '',
+			passwordErrorState: '',
+			passwordValidationState: null,
+
+			valid: false,
+			nameValid: false,
+			emailValid: false,
+			passwordValid: false,
+			confirmPasswordValid: false
 		}
+
+		this.setNameValid = this.setNameValid.bind(this);
 	}
 
 	updatePasswordState = (e) => {
-		console.log('Hey ho!');
 		this.setState({ password: e.target.value });
-		console.log(e.target.value);
 	}
 
+	passwordUpdateHandler = (e) => {
+		setTimeout(this.asdf(e) , 100);
+	}
+
+	asdf(e) {
+		if (this.state.password !== e.target.value) {
+			this.setState({ passwordErrorState: 'Given password are different', passwordValidationState: 'error' });
+			this.setState({ confirmPasswordValid: false });
+		}
+		else {
+			this.setState({ passwordErrorState: '', passwordValidationState: 'success' });
+			this.setState({ confirmPasswordValid: true });
+		}
+		this.setValid();
+	}
+
+	/*
+	================= CALLBACK FUNCTIONS FOR VALIDATION ================
+	*/
+
+	setValid() {
+		if (this.state.nameValid &&
+			this.state.emailValid &&
+			this.state.passwordValid &&
+			this.state.confirmPasswordValid)
+
+			this.setState({ valid: true });
+		else
+			this.setState({ valid: false });
+	
+		console.log('Valid:' + this.state.valid);
+	}
+
+	setNameValid(state) {
+		if (state === 'success') {
+			this.setState({ nameValid: true });	
+			console.log('true');
+		}
+		else {
+			this.setState({ nameValid: false });
+			console.log('false');
+		}
+		console.log(this.state.nameValid);
+		this.setValid();
+	}
+
+	setEmailValid = (state) => {
+		if (state === 'success')
+			this.setState({ emailValid: true });
+		else
+			this.setState({ emailValid: false })
+		console.log(this.state.emailValid);
+		this.setValid();
+	}
+	
+	setPasswordValid = (state) => {
+		if (state === 'success')
+			this.setState({ passwordValid: true });
+		else
+			this.setState({ passwordValid: false });
+		console.log(this.state.passwordValid);
+		this.setValid();
+	}
+
+	setConfirmPasswordValid = (state) => {
+		if (state === 'success')
+			this.setState({ confirmPasswordValid: true });
+		else
+			this.setState({ confirmPasswordValid: false });
+		console.log(this.state.confirmPasswordValid);
+		this.setValid();
+	}
+	
 	render() {
 		return (
 			<Panel className="form-panel">
@@ -49,6 +127,7 @@ class RegisterForm extends Component {
 									regex={ /[\w\.-_]{1,40}/ }
 									error="The name length should not exeed 40 and should contain valid characters"
 									placeholder="Your name"
+									isValid={ this.setNameValid }
 								/>
 							</Col>
 						</Row>
@@ -60,6 +139,7 @@ class RegisterForm extends Component {
 									regex={ /^[\w\.-_]{2,}@\w{2,}\.\w{2,}$/ }
 									error="Please enter a valid email address"
 									placeholder="Email address"
+									isValid={ this.setEmailValid }
 								/>
 							</Col>
 						</Row>
@@ -73,18 +153,20 @@ class RegisterForm extends Component {
 									placeholder="Password"
 
 									getPassword={ this.updatePasswordState }
+									isValid={ this.setPasswordValid }
 								/>
 							</Col>
 						</Row>
 						<Row>
 							<Col md={12}>
-								<TextControl
-									type="password"
-									validation={ true }
-									regex={ new RegExp(this.state.password) }
-									error="The given email addresses are different"
-									placeholder="Confirm password"
-								/>
+								<FormGroup validationState={ this.state.passwordValidationState }>
+									<FormControl
+										type="password"
+										placeholder="Confirm"
+										onKeyUp={ this.passwordUpdateHandler }
+									/>
+									<HelpBlock>{ this.state.passwordErrorState }</HelpBlock>
+								</FormGroup>
 							</Col>
 						</Row>
 						<Row>
@@ -92,7 +174,7 @@ class RegisterForm extends Component {
 								<Button onClick={ this.props.disappear } className="form-button" bsStyle="link">Sign in</Button>
 							</Col>
 							<Col md={6}>
-								<Button className="form-button" bsStyle="success">Register</Button>
+								<Button className="form-button" bsStyle="success" disabled={ !this.state.valid }>Register</Button>
 							</Col>
 						</Row>
 					</Grid>

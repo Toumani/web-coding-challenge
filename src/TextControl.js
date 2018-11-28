@@ -14,6 +14,8 @@ import './Form.css';
  * regex: the regex against which the input value shall be compared
  * error: the message printed right below the input if the input is invalid
  * placeholder: the input placeholder
+ * getPassword: Available only for password type. Allows to retrieve the input value
+ * isValid: Retrie component state validity
  */
 class TextControl extends Component {
 	constructor(props) {
@@ -59,8 +61,12 @@ class TextControl extends Component {
 		else {
 			this.setState({ validationState: 'error' })
 		}
-		// If control is password
-		// This is necessary to make password confirm available
+	}
+
+	handleValidation = (e) => {
+		setTimeout(() => {
+			this.props.isValid(this.state.validationState);
+		}, 100);
 	}
 
 	render() {
@@ -70,7 +76,10 @@ class TextControl extends Component {
 					type={ this.props.type }
 					placeholder={ this.props.placeholder }
 					onChange={ this.props.validation ? this.setValidationState : undefined }
+					// If control is password
+					// This is necessary to make password confirm available
 					onKeyUp={ this.props.type === 'password' ? this.props.getPassword : undefined }
+					onKeyDown={ this.handleValidation }
 					onBlur={ this.setDisplayErrorState }
 				/>
 				<HelpBlock>{ this.state.errorState }</HelpBlock>
