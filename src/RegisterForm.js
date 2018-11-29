@@ -21,6 +21,7 @@ class RegisterForm extends Component {
 
 		this.state = {
 			password: '',
+			confirmPassword: '',
 			passwordErrorState: '',
 			passwordValidationState: null,
 
@@ -34,12 +35,24 @@ class RegisterForm extends Component {
 		this.setNameValid = this.setNameValid.bind(this);
 	}
 
-	updatePasswordState = (e) => {
+	updatePasswordState(e) {
+		console.log('Password tick');
 		this.setState({ password: e.target.value });
+		this.setConfirmPasswordValid();
+	}
+
+	updateConfirmPasswordState(e) {
+		console.log('Confirm password tick');
+		this.setState({ confirmPassword: e.target.value });
+		this.setConfirmPasswordValid();
 	}
 
 	passwordUpdateHandler = (e) => {
-		setTimeout(this.asdf(e) , 100);
+		setTimeout(this.updatePasswordState(e) , 1000);
+	}
+
+	confirmPasswordUpdateHandler = (e) => {
+		setTimeout(this.updateConfirmPasswordState(e) , 1000);
 	}
 
 	asdf(e) {
@@ -102,12 +115,14 @@ class RegisterForm extends Component {
 		this.setValid();
 	}
 
-	setConfirmPasswordValid = (state) => {
-		if (state === 'success')
+	setConfirmPasswordValid = () => {
+		console.log('Password: ' + this.state.password);
+		console.log('Confirm password: ' + this.state.confirmPassword);
+		if (this.state.password === this.state.confirmPassword)
 			this.setState({ confirmPasswordValid: true });
 		else
 			this.setState({ confirmPasswordValid: false });
-		console.log(this.state.confirmPasswordValid);
+		console.log('Confirm password state: ' + this.state.confirmPasswordValid);
 		this.setValid();
 	}
 	
@@ -149,24 +164,35 @@ class RegisterForm extends Component {
 									type="password"
 									validation={ true }
 									regex={ /.{6,}/ }
-									error="You password should be at least 6 characters long"
+									error="Your password should be at least 6 characters long"
 									placeholder="Password"
 
-									getPassword={ this.updatePasswordState }
+									getPassword={ this.passwordUpdateHandler }
 									isValid={ this.setPasswordValid }
 								/>
 							</Col>
 						</Row>
 						<Row>
 							<Col md={12}>
-								<FormGroup validationState={ this.state.passwordValidationState }>
+								{/* <FormGroup validationState={ this.state.passwordValidationState }>
 									<FormControl
 										type="password"
 										placeholder="Confirm"
 										onKeyUp={ this.passwordUpdateHandler }
 									/>
 									<HelpBlock>{ this.state.passwordErrorState }</HelpBlock>
-								</FormGroup>
+								</FormGroup> */}
+								<TextControl
+									type="confirm-password"
+									validation={ true }
+									valid={ this.state.confirmPasswordValid }
+									regex={ null }
+									error="Given passwords are different"
+									placeholder="Confirm password"
+
+									getPassword={ this.confirmPasswordUpdateHandler }
+									isValid={ this.setConfirmPasswordValid }
+								/>
 							</Col>
 						</Row>
 						<Row>

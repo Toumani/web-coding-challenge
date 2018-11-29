@@ -64,25 +64,29 @@ class TextControl extends Component {
 	}
 
 	handleValidation = (e) => {
+		// Timed out to keep state up to date
 		setTimeout(() => {
-			this.props.isValid(this.state.validationState);
-		}, 100);
+			if (this.props.type === 'confirm-password')
+				this.props.isValid();
+			else
+				this.props.isValid(this.state.validationState);
+		}, 400);
 	}
 
 	render() {
 		return (
-			<FormGroup validationState={ this.state.validationState }>
+			<FormGroup validationState={ this.props.type === 'confirm-password' ? (this.props.valid ? 'sucess' : 'error') : this.state.validationState }>
 				<FormControl
-					type={ this.props.type }
+					type={ this.props.type === 'password-confirm' ? 'password' : this.props.type }
 					placeholder={ this.props.placeholder }
 					onChange={ this.props.validation ? this.setValidationState : undefined }
 					// If control is password
 					// This is necessary to make password confirm available
-					onKeyUp={ this.props.type === 'password' ? this.props.getPassword : undefined }
+					onKeyUp={ this.props.type === 'password' || this.props.type === 'confirm-password' ? this.props.getPassword : undefined }
 					onKeyDown={ this.handleValidation }
 					onBlur={ this.setDisplayErrorState }
 				/>
-				<HelpBlock>{ this.state.errorState }</HelpBlock>
+				<HelpBlock>{ this.props.type === 'confirm-password' ? this.state.errorState : this.state.errorState }</HelpBlock>
 			</FormGroup>
 		)
 	}

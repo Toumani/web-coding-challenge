@@ -25,7 +25,10 @@ class LoginForm extends Component {
 		this.state = {
 			emailError: '',
 			emailValidation: null,
-			displayEmailError: false
+			displayEmailError: false,
+
+			valid: false,
+			emailValid: false
 		};
 	}
 
@@ -63,6 +66,21 @@ class LoginForm extends Component {
 		}
 	}
 
+	setEmailValid = (state) => {
+		if (state === 'success')
+			this.setState({ emailValid: true })
+		else
+			this.setState({ emailValid: false })
+		this.setValid();
+	}
+
+	setValid() {
+		if (this.state.emailValid)
+			this.setState({ valid: true });
+		else
+			this.setState({ valid: false })
+	}
+
 	render() {
 		return (
 			<Panel className="form-panel">
@@ -79,6 +97,7 @@ class LoginForm extends Component {
 									regex={ /^[\w\.-_]{2,}@\w{2,}\.\w{2,}$/ }
 									error="Please enter a valid email address"
 									placeholder="Email address"
+									isValid={ this.setEmailValid }
 								/>
 							</Col>
 						</Row>
@@ -90,6 +109,7 @@ class LoginForm extends Component {
 									regex={ null }
 									error=""
 									placeholder="Password"
+									isValid={ () => {} }
 								/>
 							</Col>
 						</Row>
@@ -98,7 +118,7 @@ class LoginForm extends Component {
 								<Button onClick={ this.props.disappear } className="form-button" bsStyle="link">Register</Button>
 							</Col>
 							<Col md={6}>
-								<Button className="form-button" bsStyle="success" disabled={ true }>Sign in</Button>
+								<Button className="form-button" bsStyle="success" disabled={ !this.state.valid }>Sign in</Button>
 							</Col>
 						</Row>
 					</Grid>
