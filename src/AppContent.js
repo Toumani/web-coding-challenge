@@ -17,14 +17,14 @@ class AppContent extends Component {
 	 * Initialize the shop list
 	 */
 	componentDidMount() {
-		this.getNerbyShops();
+		this.getNearbyShops();
 	}
 
 	/**
 	 * This function request by AJAX this list of nearby shops and set the state to the obtained value
 	 * A shop is defined by an array of objects containing the name, the distance and the image of the shop
 	 */
-	getNerbyShops() {
+	getNearbyShops() {
 		// Mocking
 		this.setState({ shops:
 			[
@@ -47,6 +47,43 @@ class AppContent extends Component {
 		});
 	}
 
+	/**
+	 * This is a debugging function. Acutally, server handles refleshed list
+	 */
+	getRefreshedNearbyShops = (e) => {
+		// Mocking
+		this.setState({ shops:
+			[
+				{
+					name: "Strings",
+					distance: 7,
+					image: "./Strings.jpg"
+				},
+				{
+					name: "Wind",
+					distance: 17,
+					image: "./Strings.jpg"
+				}
+			]
+		});
+	}
+
+	/**
+	 * Request favorite shops from server
+	 */
+	getRefreshedFavoriteShops = (e) => {
+		// Mocking
+		this.setState({ shops:
+			[
+				{
+					name: "Range Motors",
+					distance: 12,
+					image: "./Range Rover.jpeg"
+				}
+			]
+		});
+	}
+
 	render() {
 		var shops = null;
 		if (this.state.shops !== null) {
@@ -56,13 +93,16 @@ class AppContent extends Component {
 						name={ shop.name}
 						distance={ shop.distance }
 						image={ shop.image }
+
+						liked={ this.getRefreshedNearbyShops }
+						disliked={ this.getRefreshedNearbyShops }
 					/>
 				</Col>
 			);
 		}
 		return (
 			<div>
-				<Links />
+				<Links nearby={ this.getRefreshedNearbyShops } favorite={ this.getRefreshedFavoriteShops }/>
 				<Grid>
 					<Row>
 						{ shops }

@@ -10,10 +10,10 @@ class Shop extends React.Component {
 				<h3>{ this.props.name }</h3>
 				<p>{ this.props.distance } km</p>
 				<p className="button-container">
-					<Button bsSize="large">
+					<Button bsSize="large" onClick={ this.props.liked }>
 						<Glyphicon glyph="heart" /> Like
 					</Button>
-					<Button bsSize="large">
+					<Button bsSize="large" onClick={ this.props.disliked }>
 						<Glyphicon glyph="thumbs-down" /> Dislike
 					</Button>
 				</p>
