@@ -65,11 +65,16 @@ class TextControl extends Component {
 
 	handleValidation = (e) => {
 		// Timed out to keep state up to date
-		setTimeout(() => {
-			if (this.props.type === 'confirm-password')
+		this.setState({ value: e.target.value })
+		setTimeout((e) => {
+			if (this.props.type === 'confirm-password') {
+				if (this.props.valid) {
+					this.setState({ displayErrorState: false, errorState: ''});
+				}
 				this.props.isValid();
+			}
 			else
-				this.props.isValid(this.state.validationState);
+				this.props.isValid(this.state.validationState, this.state.value);
 		}, 400);
 	}
 
@@ -77,7 +82,7 @@ class TextControl extends Component {
 		return (
 			<FormGroup validationState={ this.props.type === 'confirm-password' ? (this.props.valid ? 'sucess' : 'error') : this.state.validationState }>
 				<FormControl
-					type={ this.props.type === 'password-confirm' ? 'password' : this.props.type }
+					type={ this.props.type === 'confirm-password' ? 'password' : this.props.type }
 					placeholder={ this.props.placeholder }
 					onChange={ this.props.validation ? this.setValidationState : undefined }
 					// If control is password
@@ -86,7 +91,7 @@ class TextControl extends Component {
 					onKeyDown={ this.handleValidation }
 					onBlur={ this.setDisplayErrorState }
 				/>
-				<HelpBlock>{ this.props.type === 'confirm-password' ? this.state.errorState : this.state.errorState }</HelpBlock>
+				<HelpBlock>{ this.state.errorState }</HelpBlock>
 			</FormGroup>
 		)
 	}

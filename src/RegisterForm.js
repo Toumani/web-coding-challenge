@@ -1,18 +1,11 @@
+// External imports
 import React, { Component } from 'react';
-import './App.css';
+import { Panel, Grid, Row, Col, Button } from 'react-bootstrap';
 
-// React-Bootstrap component
-import { Panel } from 'react-bootstrap';
-import { Grid } from 'react-bootstrap';
-import { Row } from 'react-bootstrap';
-import { Col } from 'react-bootstrap';
-import { Button } from 'react-bootstrap';
-import { FormControl, HelpBlock, FormGroup } from 'react-bootstrap';
-
-// In app imports
+// In-app imports
 import TextControl from './TextControl';
 
-// CSS import
+import './App.css';
 import './Form.css';
 
 class RegisterForm extends Component {

@@ -1,19 +1,18 @@
+// External imports
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import ReactDOM from 'react-dom';
+import { Panel, Grid, Row, Col, Button } from 'react-bootstrap';
 
-// React-Bootstrap component
-import { Panel } from 'react-bootstrap';
-import { Grid } from 'react-bootstrap';
-import { Row } from 'react-bootstrap';
-import { Col } from 'react-bootstrap';
-import { FormControl } from 'react-bootstrap';
-import { Button } from 'react-bootstrap';
-import { HelpBlock } from 'react-bootstrap';
-import { FormGroup } from 'react-bootstrap';
+import $ from "jquery";
+
+import * as cookie from './cookies';
 
 // In app imports
+import App from './App';
 import TextControl from './TextControl';
+
+import logo from './logo.svg';
+import './App.css';
 
 // CSS import
 import './Form.css';
@@ -53,7 +52,7 @@ class LoginForm extends Component {
 	}
 
 	/**
-	 * Set email input form group validaiton state
+	 * Set email input form group validation state
 	 * Trigerred when email input value is changed
 	 */
 	setEmailState = (e) => {
@@ -66,12 +65,17 @@ class LoginForm extends Component {
 		}
 	}
 
-	setEmailValid = (state) => {
-		if (state === 'success')
-			this.setState({ emailValid: true })
+	setEmailValid = (state, value) => {
+		if (state === 'success') {
+			this.setState({ emailValid: true, emailValue: value })
+		}
 		else
 			this.setState({ emailValid: false })
 		this.setValid();
+	}
+
+	setPasswordValid = (state, value) => {
+		this.setState({ passwordValue: value })
 	}
 
 	setValid() {
@@ -79,6 +83,54 @@ class LoginForm extends Component {
 			this.setState({ valid: true });
 		else
 			this.setState({ valid: false })
+	}
+
+	signIn = (e) => {
+		console.log('Sending auth request');
+		var url = 'http://localhost:9090/sign-in';
+		var email = this.state.emailValue;
+		var password = this.state.passwordValue;
+		var data = JSON.stringify({
+			email: email,
+			password: password,
+			location: {
+				latitude: 10.0,
+				longitude: 0.5
+			}
+		});
+		var datas = "{\
+			\"email\": \"toumani49@gmail.com\",\
+			\"password\": \"hello\",\
+			\"location\": {\
+				\"latitude\": 10.0,\
+				\"longitude\": 0.5\
+			}\
+		}";
+		console.log(data);
+		console.log(datas);
+		$.ajax({
+			type: 'POST',
+			url: url,
+			processData: false,
+			dataType: 'JSON',
+			data: data,
+			headers: {
+				"Content-Type": "application/json"
+			},
+			encode: true,
+			success: (response, status, xhr) => {
+				if (response !== null) {
+					cookie.setCookie('hashcode', response.hashcode, 20);
+					ReactDOM.render(<App />, document.getElementById('root'));
+				}
+				else {
+					console.log('Show error message');
+				}
+			},
+			error: function(xhr, status, error) {
+				console.log("Something went wrong!");
+			}
+		});
 	}
 
 	render() {
@@ -109,7 +161,7 @@ class LoginForm extends Component {
 									regex={ null }
 									error=""
 									placeholder="Password"
-									isValid={ () => {} }
+									isValid={ this.setPasswordValid }
 								/>
 							</Col>
 						</Row>
@@ -118,7 +170,12 @@ class LoginForm extends Component {
 								<Button onClick={ this.props.disappear } className="form-button" bsStyle="link">Register</Button>
 							</Col>
 							<Col md={6}>
-								<Button className="form-button" bsStyle="success" disabled={ !this.state.valid }>Sign in</Button>
+								<Button className="form-button"
+										bsStyle="success"
+										disabled={ !this.state.valid }
+										onClick={ this.signIn }>
+										Sign in
+								</Button>
 							</Col>
 						</Row>
 					</Grid>

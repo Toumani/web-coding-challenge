@@ -1,10 +1,6 @@
-// React imports
+// External imports
 import React, { Component } from 'react';
-
-// React-Bootstrap imports
-import { Grid } from 'react-bootstrap';
-import { Row } from 'react-bootstrap';
-import { Col } from 'react-bootstrap';
+import { Grid, Row, Col } from 'react-bootstrap';
 
 // In-app imports
 import Header from './Header';

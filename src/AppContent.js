@@ -2,11 +2,11 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col, PageHeader } from 'react-bootstrap';
 
+import $ from "jquery";
+
 // In-app imports
 import Shop from './Shop';
 import Links from './Links';
-
-import $ from "jquery";
 
 class AppContent extends Component {
 	constructor(props) {
