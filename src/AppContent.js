@@ -1,9 +1,10 @@
+// External imports
 import React, { Component } from 'react';
-import { Button, Grid, Row, Col, PageHeader } from 'react-bootstrap';
+import { Grid, Row, Col, PageHeader } from 'react-bootstrap';
 
+// In-app imports
 import Shop from './Shop';
 import Links from './Links';
-
 
 import $ from "jquery";
 
@@ -25,10 +26,12 @@ class AppContent extends Component {
 	}
 
 	/**
-	 * This function request by AJAX this list of nearby shops and set the state to the obtained value
-	 * A shop is defined by an array of objects containing the name, the distance and the image of the shop
+	 * This function requests by AJAX a list of shops and set the state to the obtained value
+	 * A shop is defined by an array of objects containing the id, the name, the distance and the image of the shop
+	 * @param {String} shops Accepted values: nearby and favorite
 	 */
-	getNearbyShops() {
+	getShops(shops) {
+		var url = 'http://localhost:9090/';
 		var data = "{\
 			\"hashcode\": \"b8adf586687809a7d4d6eb61f62549209e218c75\",\
 			\"location\": {\
@@ -36,9 +39,17 @@ class AppContent extends Component {
 				\"longitude\": -9.236141\
 			}\
 		}";
+		switch(shops) {
+			case 'nearby':
+				url += 'shops';
+				break;
+			case 'favorite':
+				url += 'favorite';
+				break;
+		}
 		$.ajax({
 			type: 'POST',
-			url: "http://localhost:9090/shops",
+			url: url,
 			processData: false,
 			data: data,
 			headers: {
@@ -47,9 +58,7 @@ class AppContent extends Component {
 			dataType: 'JSON',
 			encode: true,
 			success: (response, status, xhr) => {
-				console.log("Showing nearby shop");
-				console.log(response);
-				this.setState({ shops: response, view: 'nearby' });
+				this.setState({ shops: response, view: shops });
 			},
 			error: function(xhr, status, error) {
 				console.log("Something went wrong!");
@@ -57,60 +66,34 @@ class AppContent extends Component {
 		});
 	}
 
+	/**
+	 * Requests nearby shops from server
+	 */
+	getNearbyShops() {
+		console.log('Showing nearby shops');
+		this.getShops('nearby');
+	}
+
+	/**
+	 * Requests favorite shops from server
+	 */
+	getFavoriteShops()  {
+		console.log('Showing favorite shops');
+		this.getShops('favorite');
+	}
+
+	/**
+	 * Hadles nearby shops request event
+	 */
 	getNearbyShopsFromEvent = (e) => {
 		this.getNearbyShops();
 	}
 
+	/**
+	 * Hadles favorite shops request event
+	 */
 	getFavoriteShopsFromEvent = (e) => {
 		this.getFavoriteShops();
-	}
-
-	/**
-	 * This is a debugging function. Acutally, server handles refleshed list
-	 */
-	getRefreshedNearbyShops = (e) => {
-		// Mocking
-		this.setState({ shops:
-			[
-				{
-					name: "Range Motors",
-					distance: 12,
-					image: "./Range Rover.jpeg"
-				}
-			]
-		});
-	}
-
-	/**
-	 * Request favorite shops from server
-	 */
-	getFavoriteShops = (e) => {
-		var data = "{\
-			\"hashcode\": \"b8adf586687809a7d4d6eb61f62549209e218c75\",\
-			\"location\": {\
-				\"latitude\": 32.288742,\
-				\"longitude\": -9.236141\
-			}\
-		}";
-		$.ajax({
-			type: 'POST',
-			url: "http://localhost:9090/favorite",
-			processData: false,
-			data: data,
-			headers: {
-				"Content-Type": "application/json"
-			},
-			dataType: 'JSON',
-			encode: true,
-			success: (response, status, xhr) => {
-				console.log("Showing favorite shop");
-				console.log(response);
-				this.setState({ shops: response, view: 'favorite' });
-			},
-			error: function(xhr, status, error) {
-				console.log("Something went wrong!");
-			}
-		});
 	}
 
 	render() {

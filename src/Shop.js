@@ -1,11 +1,13 @@
+// External imports
 import React, { Component } from 'react';
 import { Thumbnail, Button, Glyphicon } from 'react-bootstrap';
 
-import './Shop.css';
-
 import $ from "jquery";
 
-class Shop extends React.Component {
+// In-app imports
+import './Shop.css';
+
+class Shop extends Component {
 	constructor(props) {
 		super(props);
 		
@@ -13,113 +15,82 @@ class Shop extends React.Component {
 			view: this.props.view
 		}
 	}
-
+	/**
+	 * Called at any interaction with a shop
+	 * @param interaction enum { 'like', 'dislike', 'remove' }
+	 */
+	interactWithShop(interaction) {
+		var url = 'http://localhost:9090/';
+		var data = "{\
+			\"hashcode\": \"b8adf586687809a7d4d6eb61f62549209e218c75\",\
+			\"shop\": {\
+				\"id\": " + this.props.id + ",\
+				\"name\": \"\",\
+				\"image\": \"\",\
+				\"location\": {\
+					\"latitude\": 0.0,\
+					\"longitude\": 0.0\
+				}\
+			}\
+		}";
+		var afterwards;
+		switch (interaction) {
+			case 'like': // Like
+				url += 'like';
+				afterwards = this.props.liked;
+				break;
+			case 'dislike': // Dislike
+				url += 'dislike';
+				afterwards = this.props.disliked;
+				break;
+			case 'remove': // Remove from favorite
+				url += 'remove';
+				afterwards = this.props.removed;
+				break;
+			default:
+				break;
+		}
+		$.ajax({
+			type: 'POST',
+			url: url,
+			processData: false,
+			data: data,
+			headers: {
+				"Content-Type": "application/json"
+			},
+			dataType: 'JSON',
+			encode: true,
+			success: (response, status, xhr) => {
+				console.log(url);
+				afterwards();
+			},
+			error: function(xhr, status, error) {
+				console.log("Something went wrong!");
+			}
+		});
+	}
+	/**
+	 * Handles like event
+	 */
 	likeShop = (e) => {
 		console.log("Like event sent");
-		var data = "{\
-			\"hashcode\": \"b8adf586687809a7d4d6eb61f62549209e218c75\",\
-			\"shop\": {\
-				\"id\": " + this.props.id + ",\
-				\"name\": \"\",\
-				\"image\": \"\",\
-				\"location\": {\
-					\"latitude\": 0.0,\
-					\"longitude\": 0.0\
-				}\
-			}\
-		}";
-		$.ajax({
-			type: 'POST',
-			url: "http://localhost:9090/like",
-			processData: false,
-			data: data,
-			headers: {
-				"Content-Type": "application/json"
-			},
-			dataType: 'JSON',
-			encode: true,
-			success: (response, status, xhr) => {
-				console.log("Liking shop with id: " + this.props.id);
-				console.log(response);
-				// this.setState({ shops: response, view: 'favorite' });
-				this.props.liked();
-			},
-			error: function(xhr, status, error) {
-				console.log("Something went wrong!");
-			}
-		});
+		this.interactWithShop('like');
 	}
 
+	/**
+	 * Handles dislike event
+	 */
 	dislikeShop = (e) => {
 		console.log("Dislike event sent");
-		var data = "{\
-			\"hashcode\": \"b8adf586687809a7d4d6eb61f62549209e218c75\",\
-			\"shop\": {\
-				\"id\": " + this.props.id + ",\
-				\"name\": \"\",\
-				\"image\": \"\",\
-				\"location\": {\
-					\"latitude\": 0.0,\
-					\"longitude\": 0.0\
-				}\
-			}\
-		}";
-		$.ajax({
-			type: 'POST',
-			url: "http://localhost:9090/dislike",
-			processData: false,
-			data: data,
-			headers: {
-				"Content-Type": "application/json"
-			},
-			dataType: 'JSON',
-			encode: true,
-			success: (response, status, xhr) => {
-				console.log("Disliking shop with id: " + this.props.id);
-				console.log(response);
-				// this.setState({ shops: response, view: 'favorite' });
-				this.props.disliked();
-			},
-			error: function(xhr, status, error) {
-				console.log("Something went wrong!");
-			}
-		});
+		this.interactWithShop('dislike');
 	}
 
+	/**
+	 * Handles remove event
+	 */
 	removeShop = (e) => {
 		console.log("Remove event sent");
-		var data = "{\
-			\"hashcode\": \"b8adf586687809a7d4d6eb61f62549209e218c75\",\
-			\"shop\": {\
-				\"id\": " + this.props.id + ",\
-				\"name\": \"\",\
-				\"image\": \"\",\
-				\"location\": {\
-					\"latitude\": 0.0,\
-					\"longitude\": 0.0\
-				}\
-			}\
-		}";
-		$.ajax({
-			type: 'POST',
-			url: "http://localhost:9090/remove",
-			processData: false,
-			data: data,
-			headers: {
-				"Content-Type": "application/json"
-			},
-			dataType: 'JSON',
-			encode: true,
-			success: (response, status, xhr) => {
-				console.log("Removing shop with id: " + this.props.id);
-				console.log(response);
-				// this.setState({ shops: response, view: 'favorite' });
-				this.props.removed();
-			},
-			error: function(xhr, status, error) {
-				console.log("Something went wrong!");
-			}
-		});
+		this.interactWithShop('remove');
 	}
 
 	render() {
