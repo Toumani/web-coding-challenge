@@ -47,7 +47,7 @@ class AppContent extends Component {
 			dataType: 'JSON',
 			encode: true,
 			success: (response, status, xhr) => {
-				console.log("Fine");
+				console.log("Showing nearby shop");
 				console.log(response);
 				this.setState({ shops: response, view: 'nearby' });
 			},
@@ -103,7 +103,7 @@ class AppContent extends Component {
 			dataType: 'JSON',
 			encode: true,
 			success: (response, status, xhr) => {
-				console.log("Fine");
+				console.log("Showing favorite shop");
 				console.log(response);
 				this.setState({ shops: response, view: 'favorite' });
 			},
@@ -125,8 +125,10 @@ class AppContent extends Component {
 
 						liked={ this.getNearbyShopsFromEvent }
 						disliked={ this.getNearbyShopsFromEvent }
+						removed={ this.getFavoriteShopsFromEvent }
 
 						view={ this.state.view }
+						id={ shop.id }
 					/>
 				</Col>
 			);
