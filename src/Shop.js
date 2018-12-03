@@ -14,7 +14,7 @@ class Shop extends React.Component {
 		}
 	}
 
-	liked = (e) => {
+	likeShop = (e) => {
 		console.log("Like event sent");
 		var data = "{\
 			\"hashcode\": \"b8adf586687809a7d4d6eb61f62549209e218c75\",\
@@ -50,15 +50,87 @@ class Shop extends React.Component {
 		});
 	}
 
+	dislikeShop = (e) => {
+		console.log("Dislike event sent");
+		var data = "{\
+			\"hashcode\": \"b8adf586687809a7d4d6eb61f62549209e218c75\",\
+			\"shop\": {\
+				\"id\": " + this.props.id + ",\
+				\"name\": \"\",\
+				\"image\": \"\",\
+				\"location\": {\
+					\"latitude\": 0.0,\
+					\"longitude\": 0.0\
+				}\
+			}\
+		}";
+		$.ajax({
+			type: 'POST',
+			url: "http://localhost:9090/dislike",
+			processData: false,
+			data: data,
+			headers: {
+				"Content-Type": "application/json"
+			},
+			dataType: 'JSON',
+			encode: true,
+			success: (response, status, xhr) => {
+				console.log("Disliking shop with id: " + this.props.id);
+				console.log(response);
+				// this.setState({ shops: response, view: 'favorite' });
+				this.props.disliked();
+			},
+			error: function(xhr, status, error) {
+				console.log("Something went wrong!");
+			}
+		});
+	}
+
+	removeShop = (e) => {
+		console.log("Remove event sent");
+		var data = "{\
+			\"hashcode\": \"b8adf586687809a7d4d6eb61f62549209e218c75\",\
+			\"shop\": {\
+				\"id\": " + this.props.id + ",\
+				\"name\": \"\",\
+				\"image\": \"\",\
+				\"location\": {\
+					\"latitude\": 0.0,\
+					\"longitude\": 0.0\
+				}\
+			}\
+		}";
+		$.ajax({
+			type: 'POST',
+			url: "http://localhost:9090/remove",
+			processData: false,
+			data: data,
+			headers: {
+				"Content-Type": "application/json"
+			},
+			dataType: 'JSON',
+			encode: true,
+			success: (response, status, xhr) => {
+				console.log("Removing shop with id: " + this.props.id);
+				console.log(response);
+				// this.setState({ shops: response, view: 'favorite' });
+				this.props.removed();
+			},
+			error: function(xhr, status, error) {
+				console.log("Something went wrong!");
+			}
+		});
+	}
+
 	render() {
 		var buttonContainer;
 		if (this.props.view === 'nearby')
 			buttonContainer = (
 				<p className="button-container">
-					<Button bsSize="large" onClick={ this.liked }>
+					<Button bsSize="large" onClick={ this.likeShop }>
 						<Glyphicon glyph="heart" /> Like
 					</Button>
-					<Button bsSize="large" onClick={ this.props.disliked }>
+					<Button bsSize="large" onClick={ this.dislikeShop }>
 						<Glyphicon glyph="thumbs-down" /> Dislike
 					</Button>
 				</p>
@@ -66,7 +138,7 @@ class Shop extends React.Component {
 		else {
 			buttonContainer = (
 				<p className="button-container">
-					<Button bsSize="large" onClick={ this.props.removed }>
+					<Button bsSize="large" onClick={ this.removeShop }>
 						<Glyphicon glyph="minus" /> Remove
 					</Button>
 				</p>
