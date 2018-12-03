@@ -11,6 +11,9 @@
 # production
 /build
 
+# unused files
+/public/*.jpeg
+
 # misc
 .DS_Store
 .env.local

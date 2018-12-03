@@ -4,6 +4,8 @@ import { Grid, Row, Col, PageHeader } from 'react-bootstrap';
 
 import $ from "jquery";
 
+import * as cookie from './cookies';
+
 // In-app imports
 import Shop from './Shop';
 import Links from './Links';
@@ -32,13 +34,22 @@ class AppContent extends Component {
 	 */
 	getShops(shops) {
 		var url = 'http://localhost:9090/';
-		var data = "{\
+		var hashcode = cookie.readCookie('hashcode');
+		cookie.setCookie('hashcode', hashcode, 60); // Extending cookie timeout
+		var data = JSON.stringify({
+			hashcode: hashcode,
+			location: {
+				latitude: 32.288742,
+				longitude: -9.236141
+			}
+		});
+		/* var data = "{\
 			\"hashcode\": \"b8adf586687809a7d4d6eb61f62549209e218c75\",\
 			\"location\": {\
 				\"latitude\": 32.288742,\
 				\"longitude\": -9.236141\
 			}\
-		}";
+		}"; */
 		switch(shops) {
 			case 'nearby':
 				url += 'shops';

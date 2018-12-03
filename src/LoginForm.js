@@ -1,7 +1,7 @@
 // External imports
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Panel, Grid, Row, Col, Button } from 'react-bootstrap';
+import { Panel, Grid, Row, Col, Button, Alert } from 'react-bootstrap';
 
 import $ from "jquery";
 
@@ -9,6 +9,7 @@ import * as cookie from './cookies';
 
 // In app imports
 import App from './App';
+import Auth from './Auth';
 import TextControl from './TextControl';
 
 import logo from './logo.svg';
@@ -98,16 +99,6 @@ class LoginForm extends Component {
 				longitude: 0.5
 			}
 		});
-		var datas = "{\
-			\"email\": \"toumani49@gmail.com\",\
-			\"password\": \"hello\",\
-			\"location\": {\
-				\"latitude\": 10.0,\
-				\"longitude\": 0.5\
-			}\
-		}";
-		console.log(data);
-		console.log(datas);
 		$.ajax({
 			type: 'POST',
 			url: url,
@@ -119,12 +110,14 @@ class LoginForm extends Component {
 			},
 			encode: true,
 			success: (response, status, xhr) => {
-				if (response !== null) {
-					cookie.setCookie('hashcode', response.hashcode, 20);
+				if (response.checksum !== '') {
+					cookie.setCookie('hashcode', response.checksum, 20);
 					ReactDOM.render(<App />, document.getElementById('root'));
 				}
 				else {
+					this.setState({ error: 'auth-failed'});
 					console.log('Show error message');
+					ReactDOM.render(<Auth />, document.getElementById('root'));
 				}
 			},
 			error: function(xhr, status, error) {
@@ -134,53 +127,66 @@ class LoginForm extends Component {
 	}
 
 	render() {
+		var alert;
+		if (this.state.error === 'auth-failed') {
+			alert = (
+				<Alert bsStyle="danger">
+					Authentication failed. Please check you email and password.
+				</Alert>
+			);
+		}
+		else
+			alert = null;
 		return (
-			<Panel className="form-panel">
-				<Panel.Heading>
-					<Panel.Title componentClass="h3">Login</Panel.Title>
-				</Panel.Heading>
-				<Panel.Body>
-					<Grid className="form-content">
-						<Row>
-							<Col md={12}>
-								<TextControl
-									type="email"
-									validation={ true }
-									regex={ /^[\w\.-_]{2,}@\w{2,}\.\w{2,}$/ }
-									error="Please enter a valid email address"
-									placeholder="Email address"
-									isValid={ this.setEmailValid }
-								/>
-							</Col>
-						</Row>
-						<Row>
-							<Col md={12}>
-								<TextControl
-									type="password"
-									validation={ false }
-									regex={ null }
-									error=""
-									placeholder="Password"
-									isValid={ this.setPasswordValid }
-								/>
-							</Col>
-						</Row>
-						<Row>
-							<Col md={6}>
-								<Button onClick={ this.props.disappear } className="form-button" bsStyle="link">Register</Button>
-							</Col>
-							<Col md={6}>
-								<Button className="form-button"
-										bsStyle="success"
-										disabled={ !this.state.valid }
-										onClick={ this.signIn }>
-										Sign in
-								</Button>
-							</Col>
-						</Row>
-					</Grid>
-				</Panel.Body>
-			</Panel>
+			<div>
+				{ alert }
+				<Panel className="form-panel">
+					<Panel.Heading>
+						<Panel.Title componentClass="h3">Login</Panel.Title>
+					</Panel.Heading>
+					<Panel.Body>
+						<Grid className="form-content">
+							<Row>
+								<Col md={12}>
+									<TextControl
+										type="email"
+										validation={ true }
+										regex={ /^[\w\.-_]{2,}@\w{2,}\.\w{2,}$/ }
+										error="Please enter a valid email address"
+										placeholder="Email address"
+										isValid={ this.setEmailValid }
+									/>
+								</Col>
+							</Row>
+							<Row>
+								<Col md={12}>
+									<TextControl
+										type="password"
+										validation={ false }
+										regex={ null }
+										error=""
+										placeholder="Password"
+										isValid={ this.setPasswordValid }
+									/>
+								</Col>
+							</Row>
+							<Row>
+								<Col md={6}>
+									<Button onClick={ this.props.disappear } className="form-button" bsStyle="link">Register</Button>
+								</Col>
+								<Col md={6}>
+									<Button className="form-button"
+											bsStyle="success"
+											disabled={ !this.state.valid }
+											onClick={ this.signIn }>
+											Sign in
+									</Button>
+								</Col>
+							</Row>
+						</Grid>
+					</Panel.Body>
+				</Panel>
+			</div>
 		);
 	}
 }

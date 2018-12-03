@@ -4,6 +4,8 @@ import { Thumbnail, Button, Glyphicon } from 'react-bootstrap';
 
 import $ from "jquery";
 
+import * as cookie from './cookies';
+
 // In-app imports
 import './Shop.css';
 
@@ -21,7 +23,21 @@ class Shop extends Component {
 	 */
 	interactWithShop(interaction) {
 		var url = 'http://localhost:9090/';
-		var data = "{\
+		var hashcode = cookie.readCookie('hashcode');
+		cookie.setCookie('hashcode', hashcode, 60); // Extending cookie timeout
+		var data = JSON.stringify({
+			hashcode: hashcode,
+			shop: {
+				id: this.props.id,
+				name: "",
+				image: "",
+				location: {
+					latitude: 0.0,
+					longitude: 0.0
+				}
+			}
+		});
+		/* var data = "{\
 			\"hashcode\": \"b8adf586687809a7d4d6eb61f62549209e218c75\",\
 			\"shop\": {\
 				\"id\": " + this.props.id + ",\
@@ -32,7 +48,7 @@ class Shop extends Component {
 					\"longitude\": 0.0\
 				}\
 			}\
-		}";
+		}"; */
 		var afterwards;
 		switch (interaction) {
 			case 'like': // Like

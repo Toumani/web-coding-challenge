@@ -80,7 +80,7 @@ class TextControl extends Component {
 
 	render() {
 		return (
-			<FormGroup validationState={ this.props.type === 'confirm-password' ? (this.props.valid ? 'sucess' : 'error') : this.state.validationState }>
+			<FormGroup validationState={ this.props.type === 'confirm-password' ? (this.props.valid ? 'success' : 'error') : this.state.validationState }>
 				<FormControl
 					type={ this.props.type === 'confirm-password' ? 'password' : this.props.type }
 					placeholder={ this.props.placeholder }
