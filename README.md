@@ -32,3 +32,24 @@ As the app needs to know which user is currently logged in order to display corr
 
 ## Screenshots
 
+### Authentication page
+![Authentication](./Screenshots/Auth.png "Authentication page")
+
+### Registration page
+_Controls are automated and feedback their state to the form which makes the validation button available only if every single control is valid_ 
+![Registration](./Screenshots/Validation_actually_checking.png "Registration with validation")
+
+### Showing nearby shops
+_When showing nearby shops, neither favorite and disliked shops are visible. To see disliked shops user has no choice than waiting a timeout._
+![Nearby shops](./Screenshots/Nearby_shops.png "Nearby shops")
+
+### Showing favorite shops
+![Favorite shops](./Screenshots/Favorite_shops.png "Favorite shops")
+
+## Authors
+
+* **Toumani** - *Initial work* - [Code Challenge](https://github.com/Toumani/web-coding-challenge/)
+
+## License
+
+This project is licensed under the MIT License 

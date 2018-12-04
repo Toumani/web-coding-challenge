@@ -37,18 +37,6 @@ class Shop extends Component {
 				}
 			}
 		});
-		/* var data = "{\
-			\"hashcode\": \"b8adf586687809a7d4d6eb61f62549209e218c75\",\
-			\"shop\": {\
-				\"id\": " + this.props.id + ",\
-				\"name\": \"\",\
-				\"image\": \"\",\
-				\"location\": {\
-					\"latitude\": 0.0,\
-					\"longitude\": 0.0\
-				}\
-			}\
-		}"; */
 		var afterwards;
 		switch (interaction) {
 			case 'like': // Like
