@@ -5,7 +5,7 @@ A little web app showing nearby shops for United Remote job application process.
 ## Abstract
 
 In United Remote job application process, this project is intended to take part of the challenge. It's a simple single page application that lists nearby shops from a given position to a user.
-This project is only the view of the app. The back end is handled by a microservice which project code is available at [link]. Thus, this project is quite useless without the corresponding active service provider.
+This project is only the view of the app. The back end is handled by a microservice which project code is available [here](https://github.com/Toumani/web-coding-challenge-msa). Thus, this project is quite useless without the corresponding active service provider.
 
 ## Running the app
 
